@@ -1,6 +1,6 @@
 <snippet>
   <content><![CDATA[
-# {Project Name}
+# MultiSnake
 
 TODO: Write a project description
 
