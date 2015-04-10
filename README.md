@@ -27,4 +27,5 @@ The game will be implemented using Java's Swing library.
 
 
 --Controls--
+
 *Each arrow key on your keyboard will turn your snake in its corresponding direction. The snake CANNOT be turned backwards or forward - ONLY left and right. The reference frame is the direction in which the snake's head is currently moving.
