@@ -10,11 +10,11 @@ Each arrow key on your keyboard will turn your snake in its corresponding direct
 
 ## Contributing
 
-1. Fork it!
-2. Create your feature branch: `git checkout -b my-new-feature`
-3. Commit your changes: `git commit -am 'Add some feature'`
-4. Push to the branch: `git push origin my-new-feature`
-5. Submit a pull request :D
+1. Each player control his/her own snake.
+2. Snakes always move forward, but players can turn it either right or left - changing its direction.
+3. Colliding with walls or other plays result in immediate destruction of the snake.
+4. Eating an apple - in essence colliding your snake's head with the apple - results in the player gaining points and the snake grows.
+5. Each player's snake will have its own color `(not decided)` 
 
 ## History
 
