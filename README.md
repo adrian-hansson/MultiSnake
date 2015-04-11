@@ -6,6 +6,11 @@ MultiSnake is a multiplayer game based on the popular game Snake. Two or more pl
 
 ## Controls
 
+- `ARROW UP` - change direction to UP
+- `ARROW DOWN` - change direction to DOWN
+- `ARROW LEFT` - change direction to LEFT
+- `ARROW RIGHT` - change direction to RIGHT
+
 Each arrow key on your keyboard will turn your snake in its corresponding direction. The snake CANNOT be turned backwards or forward - ONLY left and right. The reference frame is the direction in which the snake's head is currently moving.
 
 ## Features
