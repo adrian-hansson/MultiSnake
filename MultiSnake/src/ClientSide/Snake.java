@@ -1,4 +1,4 @@
-package ServerSide;
+package ClientSide;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -6,13 +6,11 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
-import ClientSide.Level;
-
 public class Snake {
 	
-	//----------------------------------
-	// Statics to handle "global" variables
-	//----------------------------------
+	//-------------------------------------
+	// Statics to handle "global" variables...
+	//-------------------------------------
 	public static int MOVING_UP = 1;
 	public static int MOVING_DOWN = 2;
 	public static int MOVING_LEFT = 3;
@@ -21,9 +19,9 @@ public class Snake {
 	//------------------------------------------
 	// Position, speed, direction and size data
 	//------------------------------------------
-	private int posX, posY; //position of snake. Lower-left corner of snake's head
+	private int posX, posY; //position of snake. Might need to replace this.. need some form of Array to store the position of each Snake segment
 	private int sizeX, sizeY;
-	private int direction; //which direction is the snake heading in?
+	private int direction; //which direction is the snake heading in. This value should be sent to the server, so that it knows how to move the snake
 	private int speed = 1; //default is 1xMap Speed
 	
 	//------------------------------------------

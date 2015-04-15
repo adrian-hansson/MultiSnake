@@ -2,8 +2,6 @@ package ClientSide;
 
 import java.util.ArrayList;
 
-import ServerSide.Snake;
-
 //This will probably EXTEND a Swing canvas or something. Will have draw() methods, etc
 //Might or might not hold the info about sockets,etc...
 //..OR rename to Server and move 
