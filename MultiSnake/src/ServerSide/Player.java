@@ -22,5 +22,13 @@ public class Player extends Thread{
 	public Snake getSnake(){
 		return snake;
 	}
+	
+	public Socket getSocket(){
+		return socket;
+	}
+	
+	public void run(){
+		
+	}
 
 }
