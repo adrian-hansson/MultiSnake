@@ -1,5 +1,6 @@
 package ServerSide;
 
+import java.io.*;
 import java.net.Socket;
 
 import ClientSide.Snake;
@@ -11,12 +12,21 @@ public class Player extends Thread{
 	private Snake snake;
 	private Socket socket;
 	private Server server;
+	private String name;
+	OutputStream out;
+	BufferedReader bf;
 	
 	public Player(Server serer, Socket socket){
 		this.server = server;
 		this.socket = socket;
 		
-		server.addPlayer(this); //adds the created player to the Level's list of players
+		try{
+			name = socket.getInetAddress().toString(); //IP address becomes name
+			out = socket.getOutputStream();
+			server.addPlayer(this); //adds the created player to the Level's list of players
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 	}
 	
 	public Snake getSnake(){
@@ -28,7 +38,14 @@ public class Player extends Thread{
 	}
 	
 	public void run(){
-		
+		String str;
+		try{
+			while((str = bf.readLine()) != null){
+				
+			}
+		} catch(IOException e){
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -2,6 +2,9 @@ package ServerSide;
 
 import java.awt.Rectangle;
 import java.awt.Shape;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -12,12 +15,25 @@ public class Server {
 	ArrayList<Player> players;
 	int appleX, appleY;
 	int mapSize = 500; //must be divisible by 10
+	ServerSocket serverSocket;
 	
-	public Server(){
-		players = new ArrayList<Player>();
+	public Server(int portNbr){
+		try{
+			serverSocket = new ServerSocket(portNbr);
+			players = new ArrayList<Player>();
+			
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+		
 	}
 	
-	public void addPlayer(Player player){
+	public void newPlayer(Socket socket){
+		Thread player = new Player(this, socket);
+	}
+	
+	//Adds new player. Called from within each Player-thread constructor
+	public synchronized void addPlayer(Player player){
 		players.add(player);
 	}
 	

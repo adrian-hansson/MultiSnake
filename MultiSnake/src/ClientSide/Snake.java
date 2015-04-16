@@ -27,6 +27,7 @@ public class Snake {
 	private int sizeX, sizeY;
 	private int direction; //which direction is the snake heading in. This value should be sent to the server, so that it knows how to move the snake
 	private int speed = 1; //default is 1xMap Speed
+	private int size = 1;
 	
 	//------------------------------------------
 	// Resources
@@ -40,13 +41,23 @@ public class Snake {
 	private Level level;//used to call draw() methods from, etc
 	
 	public Snake(Level level){
+		this.level = level;
 		loadResources();
 		positions = new int[500][2];
-		posX = image.getHeight();
-		posY = image.getWidth();
+		sizeX = image.getHeight();
+		sizeY = image.getWidth();
+		
+		//TEMP
+			posX = 200;
+			posY = 200;
+			positions[0][0] = 200;
+			positions[0][1] = 200;
+	//END OF TEMP
 	}
 	
 	private void loadResources(){
+		imageURL = (this.getClass().getResource("/resources/SnakeGreen.png"));
+		headURL = (this.getClass().getResource("/resources/SnakeHead.png"));
 		try {
 			image = ImageIO.read(imageURL); //loads the image
 			headImage = ImageIO.read(headURL);
@@ -58,7 +69,7 @@ public class Snake {
 	
 	public void draw(Graphics graphics){
 		//possibly obsolete. keeping the method here to remind it 'might' be needed.
-		for(int i = 0; i < positions.length; i++){
+		for(int i = 0; i < size; i++){
 			if(i == 0){
 				graphics.drawImage(headImage, positions[i][0], positions[i][1], null); //first image is always the head
 			}
@@ -82,23 +93,35 @@ public class Snake {
 	}
 	
 	public void pressUp(){
-		if(direction != Snake.MOVING_LEFT){
-			direction = Snake.MOVING_DOWN;
+		if(direction != Snake.MOVING_DOWN){
+			direction = Snake.MOVING_UP;
+			//TEMP BELOW
+			positions[0][1] = positions[0][1]-10;
+			level.repaint();
 		}
 	}
 	public void pressDown(){
 		if(direction != Snake.MOVING_UP){
 			direction = Snake.MOVING_DOWN;
+			//TEMP BELOW
+			positions[0][1] = positions[0][1]+10;
+			level.repaint();
 		}
 	}
 	public void pressLeft(){
 		if(direction != Snake.MOVING_RIGHT){
 			direction = Snake.MOVING_LEFT;
+			//TEMP BELOW
+			positions[0][0] = positions[0][0]-10;
+			level.repaint();
 		}
 	}
 	public void pressRight(){
 		if(direction != Snake.MOVING_LEFT){
 			direction = Snake.MOVING_RIGHT;
+			//TEMP BELOW
+			positions[0][0] = positions[0][0]+10;
+			level.repaint();
 		}
 	}
 	public int getDirection(){

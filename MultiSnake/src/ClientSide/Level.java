@@ -1,6 +1,7 @@
 package ClientSide;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
@@ -14,9 +15,14 @@ public class Level extends JPanel{
 	private ArrayList<Snake> snakes; //list of snakes (receives updates from Server);
 	//private ArrayList<Player> players; //Not use at local level.. or?
 	private Snake snake; //the player snake
+	Client client;
 	
 	public Level(){
-		
+		snake = new Snake(this);
+		snakes = new ArrayList<Snake>();
+		snakes.add(0, snake);//puts player first in list of snakes
+		client = new Client();
+		client.start();
 	}
 	
 	public void updateSnakes(){
@@ -25,11 +31,32 @@ public class Level extends JPanel{
 		}
 	}
 	
+	public Snake getPlayer(){
+		return snake;
+	}
+	
+	public ArrayList<Snake> getSnakes(){
+		return snakes;
+	}
+	
+	public void paintComponent(Graphics g){
+		Graphics2D g2d = (Graphics2D) g;
+		super.paintComponent(g2d);
+		draw(g2d);
+	}
+	
 	public void draw(Graphics g){
 		//not sure if this method should be here.. :P
-		paintComponents(g);
+		//paintComponents(g);
 		for(int i = 0; i < snakes.size(); i++){
 			snakes.get(i).draw(g);
+		}
+	}
+	
+	public void gameLoop(){
+		//Maybe some of the game-loop stuff should happen on serverside..
+		while(true){
+			
 		}
 	}
 	
