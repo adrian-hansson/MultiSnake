@@ -12,10 +12,10 @@ public class Snake {
 	//-------------------------------------
 	// Statics to handle "global" variables...
 	//-------------------------------------
-	public static int MOVING_UP = 1;
-	public static int MOVING_DOWN = 2;
-	public static int MOVING_LEFT = 3;
-	public static int MOVING_RIGHT = 4;
+	public static int MOVING_UP = 0;
+	public static int MOVING_DOWN = 1;
+	public static int MOVING_LEFT = 2;
+	public static int MOVING_RIGHT = 3;
 	
 	//------------------------------------------
 	// Position, speed, direction and size data
@@ -27,7 +27,7 @@ public class Snake {
 	private int sizeX, sizeY;
 	private int direction; //which direction is the snake heading in. This value should be sent to the server, so that it knows how to move the snake
 	private int speed = 1; //default is 1xMap Speed
-	private int size = 1;
+	private int size = 25;
 	
 	//------------------------------------------
 	// Resources
@@ -52,6 +52,7 @@ public class Snake {
 			posY = 200;
 			positions[0][0] = 200;
 			positions[0][1] = 200;
+			direction = Snake.MOVING_UP;
 	//END OF TEMP
 	}
 	
@@ -79,8 +80,68 @@ public class Snake {
 		}
 	}
 	
-	public void update(){
+	public void move(){
 		//updates movement, etc and stuff
+		if(direction == Snake.MOVING_UP){
+			int xPrev = positions[0][0];
+			int yPrev = positions[0][1];
+			int xNew, yNew;
+			positions[0][1] = positions[0][1]-10;
+			for(int i = 1; i < size; i++){
+				xNew = positions[i][0];
+				yNew = positions[i][1];
+				positions[i][0] = xPrev;
+				positions[i][1] = yPrev;
+				xPrev = xNew;
+				yPrev = yNew;
+			}
+			level.repaint();
+		}
+		else if(direction == Snake.MOVING_DOWN){
+			int xPrev = positions[0][0];
+			int yPrev = positions[0][1];
+			int xNew, yNew;
+			positions[0][1] = positions[0][1]+10;
+			for(int i = 1; i < size; i++){
+				xNew = positions[i][0];
+				yNew = positions[i][1];
+				positions[i][0] = xPrev;
+				positions[i][1] = yPrev;
+				xPrev = xNew;
+				yPrev = yNew;
+			}
+			level.repaint();
+		}
+		else if(direction == Snake.MOVING_LEFT){
+			int xPrev = positions[0][0];
+			int yPrev = positions[0][1];
+			int xNew, yNew;
+			positions[0][0] = positions[0][0]-10;
+			for(int i = 1; i < size; i++){
+				xNew = positions[i][0];
+				yNew = positions[i][1];
+				positions[i][0] = xPrev;
+				positions[i][1] = yPrev;
+				xPrev = xNew;
+				yPrev = yNew;
+			}
+			level.repaint();
+		}
+		else if(direction == Snake.MOVING_RIGHT){
+			int xPrev = positions[0][0];
+			int yPrev = positions[0][1];
+			int xNew, yNew;
+			positions[0][0] = positions[0][0]+10;
+			for(int i = 1; i < size; i++){
+				xNew = positions[i][0];
+				yNew = positions[i][1];
+				positions[i][0] = xPrev;
+				positions[i][1] = yPrev;
+				xPrev = xNew;
+				yPrev = yNew;
+			}
+			level.repaint();
+		}
 		
 	}
 	
@@ -96,7 +157,18 @@ public class Snake {
 		if(direction != Snake.MOVING_DOWN){
 			direction = Snake.MOVING_UP;
 			//TEMP BELOW
+			int xPrev = positions[0][0];
+			int yPrev = positions[0][1];
+			int xNew, yNew;
 			positions[0][1] = positions[0][1]-10;
+			for(int i = 1; i < size; i++){
+				xNew = positions[i][0];
+				yNew = positions[i][1];
+				positions[i][0] = xPrev;
+				positions[i][1] = yPrev;
+				xPrev = xNew;
+				yPrev = yNew;
+			}
 			level.repaint();
 		}
 	}
@@ -104,7 +176,18 @@ public class Snake {
 		if(direction != Snake.MOVING_UP){
 			direction = Snake.MOVING_DOWN;
 			//TEMP BELOW
+			int xPrev = positions[0][0];
+			int yPrev = positions[0][1];
+			int xNew, yNew;
 			positions[0][1] = positions[0][1]+10;
+			for(int i = 1; i < size; i++){
+				xNew = positions[i][0];
+				yNew = positions[i][1];
+				positions[i][0] = xPrev;
+				positions[i][1] = yPrev;
+				xPrev = xNew;
+				yPrev = yNew;
+			}
 			level.repaint();
 		}
 	}
@@ -112,7 +195,18 @@ public class Snake {
 		if(direction != Snake.MOVING_RIGHT){
 			direction = Snake.MOVING_LEFT;
 			//TEMP BELOW
+			int xPrev = positions[0][0];
+			int yPrev = positions[0][1];
+			int xNew, yNew;
 			positions[0][0] = positions[0][0]-10;
+			for(int i = 1; i < size; i++){
+				xNew = positions[i][0];
+				yNew = positions[i][1];
+				positions[i][0] = xPrev;
+				positions[i][1] = yPrev;
+				xPrev = xNew;
+				yPrev = yNew;
+			}
 			level.repaint();
 		}
 	}
@@ -120,12 +214,26 @@ public class Snake {
 		if(direction != Snake.MOVING_LEFT){
 			direction = Snake.MOVING_RIGHT;
 			//TEMP BELOW
+			int xPrev = positions[0][0];
+			int yPrev = positions[0][1];
+			int xNew, yNew;
 			positions[0][0] = positions[0][0]+10;
+			for(int i = 1; i < size; i++){
+				xNew = positions[i][0];
+				yNew = positions[i][1];
+				positions[i][0] = xPrev;
+				positions[i][1] = yPrev;
+				xPrev = xNew;
+				yPrev = yNew;
+			}
 			level.repaint();
 		}
 	}
 	public int getDirection(){
 		return direction;
+	}
+	public void setDirection(int s){
+		direction = s; //for testing purposes
 	}
 	
 	public int getX(){
@@ -134,6 +242,17 @@ public class Snake {
 	
 	public int getY(){
 		return posY; //return posY for Snake Head
+	}
+	
+	public int[][] getPositions(){
+		return positions;
+	}
+	
+	public int getSize(){
+		return size;
+	}
+	public void setSize(int s){
+		size = s;
 	}
 	
 //	public static void main(String[] args){

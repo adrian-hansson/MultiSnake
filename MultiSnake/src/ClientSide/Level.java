@@ -21,8 +21,12 @@ public class Level extends JPanel{
 		snake = new Snake(this);
 		snakes = new ArrayList<Snake>();
 		snakes.add(0, snake);//puts player first in list of snakes
-		client = new Client();
+		snakes.add(new SnakeMadTest(this));
+		client = new Client(this);
 		client.start();
+		(new CollisionDetection(this)).start();
+		//Utilities.music("battleThemeA.wav");
+		//startGame();
 	}
 	
 	public void updateSnakes(){
@@ -50,13 +54,6 @@ public class Level extends JPanel{
 		//paintComponents(g);
 		for(int i = 0; i < snakes.size(); i++){
 			snakes.get(i).draw(g);
-		}
-	}
-	
-	public void gameLoop(){
-		//Maybe some of the game-loop stuff should happen on serverside..
-		while(true){
-			
 		}
 	}
 	
