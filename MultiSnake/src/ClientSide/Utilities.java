@@ -15,19 +15,21 @@ public class Utilities {
 	public static boolean isMusicPlaying = false;
 	public static boolean stopMusicRequest = false;
 	
-	public static synchronized void playSound(final String fileName) {
-		  new Thread(new Runnable() {
-		    public void run() {
+	public static synchronized void playSound(final String url) {
+		 // new Thread(new Runnable() {
+		   // public void run() {
 		      try {
 		        Clip clip = AudioSystem.getClip();
-		        AudioInputStream inputStream = AudioSystem.getAudioInputStream(Utilities.class.getResourceAsStream("/resources/"+fileName));	
+		        AudioInputStream inputStream = AudioSystem.getAudioInputStream(Utilities.class.getResourceAsStream(url));
+		        //System.out.println("SOUND PLAYING");
 		        clip.open(inputStream);
 		        clip.start(); 
 		      } catch (Exception e) {
 		        System.err.println(e.getMessage());
+		        System.out.println("Sound error");
 		      }
-		    }
-		  }).start();
+		   // }
+		 // }).start();
 		}
 	
 	public static synchronized void music(final String fileName) {

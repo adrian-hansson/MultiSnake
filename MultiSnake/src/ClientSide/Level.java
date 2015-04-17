@@ -27,6 +27,7 @@ public class Level extends JPanel{
 		(new CollisionDetection(this)).start();
 		//Utilities.music("battleThemeA.wav");
 		//startGame();
+		//Utilities.playSound("/resources/battleThemeA.wav");
 	}
 	
 	public void updateSnakes(){

@@ -8,6 +8,11 @@ public class Client extends Thread{
 	//also listens to the GUI and sends commands from that to the server
 	//holds Socket data, etc
 	
+	//----INFO PROTOCOL SUGGESTION----
+	//
+	//  Arrays are serilizable. Send all positions[][] arrays in the right order. (same order as Player-list)
+	//
+	
 	Level level;
 	Snake snake;
 	

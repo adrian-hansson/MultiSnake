@@ -20,20 +20,22 @@ public class CollisionDetection extends Thread{
 					for(int z = 0; z < snakes.get(j).getSize(); z++){ //segment of compare snake
 						if(i == j && k == z){
 							//do nothing. Cannot collide with its own head
+							
 						}else{
 							if(snakes.get(i).getPositions()[k][0] == snakes.get(j).getPositions()[z][0] && snakes.get(i).getPositions()[k][1] == snakes.get(j).getPositions()[z][1]){
 								//stuff
-								System.out.println("COLLISION!!!");
-								System.out.println("Original: ["+i+"][0] = " + snakes.get(i).getPositions()[k][0]);
-								System.out.println("Original: ["+i+"][1] = " + snakes.get(i).getPositions()[k][1]);
-								System.out.println("Compare: ["+j+"][0] = " + snakes.get(j).getPositions()[z][0]);
-								System.out.println("Compare: ["+j+"][1] = " + snakes.get(j).getPositions()[z][1]);
+//								System.out.println("COLLISION!!!");
+//								System.out.println("Original: ["+i+"][0] = " + snakes.get(i).getPositions()[k][0]);
+//								System.out.println("Original: ["+i+"][1] = " + snakes.get(i).getPositions()[k][1]);
+//								System.out.println("Compare: ["+j+"][0] = " + snakes.get(j).getPositions()[z][0]);
+//								System.out.println("Compare: ["+j+"][1] = " + snakes.get(j).getPositions()[z][1]);
+								Utilities.playSound("/resources/coin10.wav");
 							}
 							else if(snakes.get(i).getPositions()[k][0] < 0
 									|| snakes.get(i).getPositions()[k][1] < 0
 									|| snakes.get(i).getPositions()[k][0]  > 500
 									|| snakes.get(i).getPositions()[k][1]  > 500){
-								System.out.println("Outside map");
+								//System.out.println("Outside map");
 							}
 						}
 					}

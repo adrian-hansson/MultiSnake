@@ -28,6 +28,7 @@ public class Snake {
 	private int direction; //which direction is the snake heading in. This value should be sent to the server, so that it knows how to move the snake
 	private int speed = 1; //default is 1xMap Speed
 	private int size = 25;
+	private boolean isDead;
 	
 	//------------------------------------------
 	// Resources
@@ -82,6 +83,7 @@ public class Snake {
 	
 	public void move(){
 		//updates movement, etc and stuff
+		//if(!isDead){
 		if(direction == Snake.MOVING_UP){
 			int xPrev = positions[0][0];
 			int yPrev = positions[0][1];
@@ -142,7 +144,7 @@ public class Snake {
 			}
 			level.repaint();
 		}
-		
+		//}
 	}
 	
 	public void eatApple(){
