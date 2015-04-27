@@ -2,6 +2,7 @@ package ServerSide;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import ClientSide.Snake;
 
@@ -27,6 +28,10 @@ public class Player extends Thread{
 		}catch(IOException e){
 			e.printStackTrace();
 		}
+	}
+	
+	public void sendSnakes(ArrayList<Snake> snakes){
+		//out.send(snakes); not working code.. but a similar method should be used
 	}
 	
 	public Snake getSnake(){

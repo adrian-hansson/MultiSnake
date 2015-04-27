@@ -28,6 +28,18 @@ public class Server {
 		
 	}
 	
+	//not sure if this method should be 'here', though it should be somewhere..
+	public void updateAndSendSnakes(){
+		ArrayList<Snake> snakesToSend = new ArrayList<Snake>();
+		for(Player p : players){
+			snakesToSend.add(p.getSnake());
+		}
+		
+		for(Player p : players){
+			p.sendSnakes(snakesToSend);
+		}
+	}
+	
 	public void newPlayer(Socket socket){
 		Thread player = new Player(this, socket);
 	}

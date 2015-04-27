@@ -19,7 +19,7 @@ import javax.swing.JTextField;
 public class View implements KeyListener{
 
 	private JFrame frmMultisnake;
-	Level panel;
+	Level level;
 
 	/**
 	 * Launch the application.
@@ -55,10 +55,10 @@ public class View implements KeyListener{
 		frmMultisnake.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmMultisnake.getContentPane().setLayout(new BorderLayout(0, 0));
 		
-		panel = new Level();
-		panel.setToolTipText("");
-		panel.setBackground(new Color(160, 82, 45));
-		frmMultisnake.getContentPane().add(panel, BorderLayout.CENTER);
+		level = new Level();
+		level.setToolTipText("");
+		level.setBackground(new Color(160, 82, 45));
+		frmMultisnake.getContentPane().add(level, BorderLayout.CENTER);
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(new Color(0, 0, 0));
@@ -83,19 +83,23 @@ public class View implements KeyListener{
 	public void keyPressed(KeyEvent key) {
 		if(key.getKeyCode() == KeyEvent.VK_UP){
 			//System.out.println("UP KEY");
-			panel.getPlayer().pressUp();
+			//level.getPlayer().pressUp();
+			level.pressUp();
 		}
 		else if(key.getKeyCode() == KeyEvent.VK_DOWN){
 			//System.out.println("DOWN KEY");
-			panel.getPlayer().pressDown();
+			//level.getPlayer().pressDown();
+			level.pressDown();
 		}
 		else if(key.getKeyCode() == KeyEvent.VK_LEFT){
 			//System.out.println("LEFT KEY");
-			panel.getPlayer().pressLeft();
+			//level.getPlayer().pressLeft();
+			level.pressLeft();
 		}
 		else if(key.getKeyCode() == KeyEvent.VK_RIGHT){
 			//System.out.println("RIGHT KEY");
-			panel.getPlayer().pressRight();
+			//level.getPlayer().pressRight();
+			level.pressRight();
 		}
 		
 	}

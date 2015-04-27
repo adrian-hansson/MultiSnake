@@ -8,7 +8,7 @@ public class SnakeMadTest extends Snake{
 	//TEST CLASS
 	
 	public SnakeMadTest(Level level) {
-		super(level);
+		super();
 		setSize(1);
 	}
 	

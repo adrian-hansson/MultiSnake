@@ -2,12 +2,15 @@ package ClientSide;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
 
-public class Snake {
+public class Snake implements Serializable{
 	
 	//-------------------------------------
 	// Statics to handle "global" variables...
@@ -41,7 +44,7 @@ public class Snake {
 	//------------------------------------------
 	private Level level;//used to call draw() methods from, etc
 	
-	public Snake(Level level){
+	public Snake(){
 		this.level = level;
 		loadResources();
 		positions = new int[500][2];
@@ -255,6 +258,17 @@ public class Snake {
 	}
 	public void setSize(int s){
 		size = s;
+	}
+	
+	public void send(){
+		try {
+			ByteArrayOutputStream bos = new ByteArrayOutputStream() ;
+			ObjectOutputStream out = new ObjectOutputStream(bos);
+			out.writeObject(this);
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 //	public static void main(String[] args){
