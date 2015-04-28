@@ -2,6 +2,8 @@ package ClientSide;
 
 import java.util.Random;
 
+import ServerSide.Snake;
+
 public class SnakeMadTest extends Snake{
 	
 	

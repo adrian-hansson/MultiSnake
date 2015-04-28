@@ -4,8 +4,6 @@ import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import ClientSide.Snake;
-
 public class Player extends Thread{
 	//holds info about sockets, etc.
 	//this thread runs on the serverside.. and keeps track of which commands to pass along to the client-side snake class

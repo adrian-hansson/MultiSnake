@@ -1,6 +1,9 @@
-package ClientSide;
+package ServerSide;
 
 import java.util.ArrayList;
+
+import ClientSide.Level;
+import ClientSide.Utilities;
 
 public class CollisionDetection extends Thread{
 	

@@ -3,9 +3,13 @@ package ClientSide;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
-public class Client{
+import ServerSide.Snake;
+import Transport.ProtocolClient;
+
+public class Client extends Thread{
 
 	//listens to input from the server.. and gives it to the Level.. which will repaint.
 	//also listens to the GUI and sends commands from that to the server
@@ -23,58 +27,68 @@ public class Client{
 	OutputStream out;
 	String address;
 	int port;
+	ProtocolClient protocol;
 	
 	public Client(Level level, String address, int port){
-		snake = level.getPlayer();
 		this.level = level;
 		this.address = address;
 		this.port = port;
 		initiate();
+		this.start();
 	}
 	
 	private void initiate(){
 		try{
 			socket = new Socket(address, port);
+			protocol = new ProtocolClient(socket, this);
 			out = socket.getOutputStream();
 		}catch(IOException e){
 			e.printStackTrace();
 		}
-		(new ClientListener(socket, this)).start();
-	}
-	
-	public void receiveUpdateFromServer(ArrayList<Snake> snakes){
-		level.update(snakes);
-		//this is where the client gets the stuff from the server.
+		//protocol.start();
 	}
 	
 	public void sendToServer(int i){
-		try {
-			out.write(i);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		protocol.clientWrite(i);
 		//stuff from client to server
 	}
 	
 	public void run(){
-		gameLoop(); //not used? is on server-side instead?
+		while(true){
+			protocol.clientRead();
+		}
+		//gameLoop(); //not used? is on server-side instead?
 	}
 	
-	public void gameLoop(){//Not used?? is on server-side instead?
-		//Maybe some of the game-loop stuff should happen on serverside..
-		while(true){
-			ArrayList<Snake> snakes = level.getSnakes();
-			for(int i = 0; i < snakes.size(); i++){
-				snakes.get(i).move();
-			}
-			//IF CLIENT RECEIVES SOMETHING:
-			level.update(snakes);
-			try {
-				Thread.sleep(150);
-			} catch(InterruptedException ex) {
-				Thread.currentThread().interrupt();
-			}
-		}
+	public Level getLevel(){
+		return level;
 	}
+	
+//	public void connectToServer(){
+//		try {
+//			socket = new Socket("localhost", 30000);
+//		} catch (UnknownHostException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//	}
+	
+//	public void gameLoop(){//Not used?? is on server-side instead?
+//		//Maybe some of the game-loop stuff should happen on serverside..
+//		while(true){
+//			ArrayList<Snake> snakes = level.getSnakes();
+//			for(int i = 0; i < snakes.size(); i++){
+//				snakes.get(i).move();
+//			}
+//			//IF CLIENT RECEIVES SOMETHING:
+//			level.update(snakes);
+//			try {
+//				Thread.sleep(150);
+//			} catch(InterruptedException ex) {
+//				Thread.currentThread().interrupt();
+//			}
+//		}
+//	}
 	
 }

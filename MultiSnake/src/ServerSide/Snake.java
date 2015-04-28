@@ -1,4 +1,4 @@
-package ClientSide;
+package ServerSide;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -6,11 +6,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.net.Socket;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
 
-public class Snake implements Serializable{
+import Transport.ProtocolServer;
+import ClientSide.Level;
+
+public class Snake extends Thread{
 	
 	//-------------------------------------
 	// Statics to handle "global" variables...
@@ -30,7 +34,7 @@ public class Snake implements Serializable{
 	private int sizeX, sizeY;
 	private int direction; //which direction is the snake heading in. This value should be sent to the server, so that it knows how to move the snake
 	private int speed = 1; //default is 1xMap Speed
-	private int size = 25;
+	private int size = 1;
 	private boolean isDead;
 	
 	//------------------------------------------
@@ -43,44 +47,65 @@ public class Snake implements Serializable{
 	// Misc
 	//------------------------------------------
 	private Level level;//used to call draw() methods from, etc
+	private ProtocolServer protocol;
+	private Socket socket;
 	
-	public Snake(){
+	public Snake(Socket socket, int posX, int posY, int size){
+		this.size = size;
+		this.socket = socket;
 		this.level = level;
-		loadResources();
+		protocol = new ProtocolServer(socket, this);
+		//loadResources();
 		positions = new int[500][2];
-		sizeX = image.getHeight();
-		sizeY = image.getWidth();
+		
+		//TEST
+		positions[0][0] = posX;
+		positions[0][1] = posY;
+		//END OF TEST
+		
+		sizeX = 10;//image.getHeight();
+		sizeY = 10;//image.getWidth();
+		this.posX = posX;
+		this.posY = posY;
 		
 		//TEMP
-			posX = 200;
-			posY = 200;
-			positions[0][0] = 200;
-			positions[0][1] = 200;
+//			posX = 200;
+//			posY = 200;
+//			positions[0][0] = 200;
+//			positions[0][1] = 200;
 			direction = Snake.MOVING_UP;
 	//END OF TEMP
+			
+		this.start();
 	}
 	
-	private void loadResources(){
-		imageURL = (this.getClass().getResource("/resources/SnakeGreen.png"));
-		headURL = (this.getClass().getResource("/resources/SnakeHead.png"));
-		try {
-			image = ImageIO.read(imageURL); //loads the image
-			headImage = ImageIO.read(headURL);
-		} catch (IOException e) {
-			System.out.println("Image failed to load");
-			e.printStackTrace();
-		}
-	}
+//	private void loadResources(){
+//		imageURL = (this.getClass().getResource("/resources/SnakeGreen.png"));
+//		headURL = (this.getClass().getResource("/resources/SnakeHead.png"));
+//		try {
+//			image = ImageIO.read(imageURL); //loads the image
+//			headImage = ImageIO.read(headURL);
+//		} catch (IOException e) {
+//			System.out.println("Image failed to load");
+//			e.printStackTrace();
+//		}
+//	}
+//	
+//	public void draw(Graphics graphics){
+//		//possibly obsolete. keeping the method here to remind it 'might' be needed.
+//		for(int i = 0; i < size; i++){
+//			if(i == 0){
+//				graphics.drawImage(headImage, positions[i][0], positions[i][1], null); //first image is always the head
+//			}
+//			else{
+//				graphics.drawImage(image, positions[i][0], positions[i][1], null);
+//			}
+//		}
+//	}
 	
-	public void draw(Graphics graphics){
-		//possibly obsolete. keeping the method here to remind it 'might' be needed.
-		for(int i = 0; i < size; i++){
-			if(i == 0){
-				graphics.drawImage(headImage, positions[i][0], positions[i][1], null); //first image is always the head
-			}
-			else{
-				graphics.drawImage(image, positions[i][0], positions[i][1], null);
-			}
+	public void run(){
+		while(true){
+			protocol.serverRead();
 		}
 	}
 	
@@ -100,7 +125,6 @@ public class Snake implements Serializable{
 				xPrev = xNew;
 				yPrev = yNew;
 			}
-			level.repaint();
 		}
 		else if(direction == Snake.MOVING_DOWN){
 			int xPrev = positions[0][0];
@@ -115,7 +139,6 @@ public class Snake implements Serializable{
 				xPrev = xNew;
 				yPrev = yNew;
 			}
-			level.repaint();
 		}
 		else if(direction == Snake.MOVING_LEFT){
 			int xPrev = positions[0][0];
@@ -130,7 +153,6 @@ public class Snake implements Serializable{
 				xPrev = xNew;
 				yPrev = yNew;
 			}
-			level.repaint();
 		}
 		else if(direction == Snake.MOVING_RIGHT){
 			int xPrev = positions[0][0];
@@ -145,7 +167,6 @@ public class Snake implements Serializable{
 				xPrev = xNew;
 				yPrev = yNew;
 			}
-			level.repaint();
 		}
 		//}
 	}
@@ -258,6 +279,10 @@ public class Snake implements Serializable{
 	}
 	public void setSize(int s){
 		size = s;
+	}
+	
+	public ProtocolServer getProtocol(){
+		return protocol;
 	}
 	
 	public void send(){
