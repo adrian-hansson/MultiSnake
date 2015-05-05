@@ -2,8 +2,13 @@ package ClientSide;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 //This will probably EXTEND a Swing panel or something. Will have draw() methods, etc
@@ -11,37 +16,27 @@ import javax.swing.JPanel;
 //..OR rename to Server and move 
 
 public class Level extends JPanel{
-
-	private ArrayList<Snake> snakes; //list of snakes (receives updates from Server);
-	//private ArrayList<Player> players; //Not use at local level.. or?
-	private Snake snake; //the player snake
+	
+	//------------------------------------------
+	// Resources
+	//------------------------------------------
+	private URL imageURL, headURL, appleURL; //URL of resource
+	private BufferedImage image, headImage, appleImage; //each section of the snake will be a small image like this
 	Client client;
+	private int x, y, index;
+	private LinkedList<GridObject> newGrid = new LinkedList<GridObject>();
 	
 	public Level(){
-		snake = new Snake(this);
-		snakes = new ArrayList<Snake>();
-		snakes.add(0, snake);//puts player first in list of snakes
-		snakes.add(new SnakeMadTest(this));
-		client = new Client(this);
-		client.start();
-		(new CollisionDetection(this)).start();
-		//Utilities.music("battleThemeA.wav");
-		//startGame();
-		//Utilities.playSound("/resources/battleThemeA.wav");
+		loadResources();
+		client = new Client(this, "hansson", 30000);	//need to find way to connect to other than "localhost"
 	}
 	
-	public void updateSnakes(){
-		for(int i = 0; i < snakes.size(); i++){
-			snakes.get(i); //do something here..
-		}
-	}
-	
-	public Snake getPlayer(){
-		return snake;
-	}
-	
-	public ArrayList<Snake> getSnakes(){
-		return snakes;
+	public void update(int x, int y, int index){
+		newGrid.add(new GridObject(x, y, index));
+//		this.x = x;
+//		this.y = y;
+//		this.index = index;
+//		this.repaint();
 	}
 	
 	public void paintComponent(Graphics g){
@@ -50,12 +45,71 @@ public class Level extends JPanel{
 		draw(g2d);
 	}
 	
-	public void draw(Graphics g){
-		//not sure if this method should be here.. :P
-		//paintComponents(g);
-		for(int i = 0; i < snakes.size(); i++){
-			snakes.get(i).draw(g);
+	public void draw(Graphics graphics){
+		GridObject o;
+		while(!newGrid.isEmpty()) {
+			o = newGrid.poll();
+			BufferedImage imageToDraw = null;
+			if(o.getIndex() == 1) {
+				imageToDraw = image;
+			}else if(o.getIndex() == 0){
+				imageToDraw = headImage;
+			}else if(o.getIndex() == 2){
+				imageToDraw = appleImage;
+			}
+			try {
+				graphics.drawImage(imageToDraw, o.getX(), o.getY(), null);
+			} catch(NullPointerException e) {
+				System.out.println("Reference to nonexsistent image index, no image drawn");
+			}
+
 		}
 	}
 	
+	public void pressUp(){
+		client.sendToServer(0);
+	}
+	public void pressDown(){
+		client.sendToServer(1);
+	}
+	public void pressLeft(){
+		client.sendToServer(2);
+	}
+	public void pressRight(){
+		client.sendToServer(3);
+	}
+	
+	private void loadResources(){
+		imageURL = (this.getClass().getResource("/resources/SnakeGreen.png"));
+		headURL = (this.getClass().getResource("/resources/SnakeHead.png"));
+		appleURL = (this.getClass().getResource("/resources/AppleRed.png"));
+		try {
+			image = ImageIO.read(imageURL); //loads the image
+			headImage = ImageIO.read(headURL);
+			appleImage = ImageIO.read(appleURL);
+		} catch (IOException e) {
+			System.out.println("Image failed to load");
+			e.printStackTrace();
+		}
+	}
+	
+	class GridObject {
+		int xCoord, yCoord, ImgIdx;
+	
+		public GridObject(int x, int y, int index) {
+			xCoord = x;
+			yCoord = y;
+			ImgIdx = index;
+		}
+		
+		public int getX() {
+			return xCoord;
+		}
+		public int getY() {
+			return yCoord;
+		}
+		public int getIndex() {
+			return ImgIdx;
+		}
+	}
 }
