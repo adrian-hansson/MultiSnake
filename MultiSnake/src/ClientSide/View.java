@@ -51,7 +51,7 @@ public class View implements KeyListener{
 		frmMultisnake = new JFrame();
 		frmMultisnake.setResizable(false);
 		frmMultisnake.setTitle("MultiSnake");
-		frmMultisnake.setBounds(100, 100, 512, 512);
+		frmMultisnake.setBounds(100, 100, 506, 506);
 		frmMultisnake.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmMultisnake.getContentPane().setLayout(new BorderLayout(0, 0));
 		

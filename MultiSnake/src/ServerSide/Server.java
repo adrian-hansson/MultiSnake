@@ -103,4 +103,9 @@ public class Server extends Thread{
 	public void addSnake(Socket socket, int startX, int startY, int startLength) {
 		snakes.add(new Snake(this, socket, startX, startY, startLength));
 	}
+	
+	public void checkCollisions() {
+		
+	}
+	
 }
