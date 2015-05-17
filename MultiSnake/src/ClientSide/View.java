@@ -59,20 +59,6 @@ public class View implements KeyListener{
 		level.setToolTipText("");
 		level.setBackground(new Color(160, 82, 45));
 		frmMultisnake.getContentPane().add(level, BorderLayout.CENTER);
-		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBackground(new Color(0, 0, 0));
-		frmMultisnake.getContentPane().add(panel_1, BorderLayout.SOUTH);
-		GroupLayout gl_panel_1 = new GroupLayout(panel_1);
-		gl_panel_1.setHorizontalGroup(
-			gl_panel_1.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 506, Short.MAX_VALUE)
-		);
-		gl_panel_1.setVerticalGroup(
-			gl_panel_1.createParallelGroup(Alignment.TRAILING)
-				.addGap(0, 31, Short.MAX_VALUE)
-		);
-		panel_1.setLayout(gl_panel_1);
 		frmMultisnake.addKeyListener(this);
 	}
 
