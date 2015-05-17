@@ -89,12 +89,6 @@ public class View implements KeyListener{
 		}
 		
 	}
-	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void keyReleased(KeyEvent arg0) {}
+	public void keyTyped(KeyEvent arg0) {}
 }

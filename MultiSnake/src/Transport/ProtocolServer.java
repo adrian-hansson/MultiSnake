@@ -25,7 +25,6 @@ public class ProtocolServer {
 			is = socket.getInputStream();
 			os = socket.getOutputStream();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

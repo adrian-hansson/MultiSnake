@@ -45,7 +45,6 @@ public class Client extends Thread{
 		}catch(IOException e){
 			e.printStackTrace();
 		}
-		//protocol.start();
 	}
 	
 	public void sendToServer(int i){
@@ -57,7 +56,6 @@ public class Client extends Thread{
 		while(true){
 			protocol.clientRead();
 		}
-		//gameLoop(); //not used? is on server-side instead?
 	}
 	
 	public Level getLevel(){

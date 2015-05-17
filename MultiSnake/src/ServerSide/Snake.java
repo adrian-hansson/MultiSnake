@@ -82,7 +82,7 @@ public class Snake extends Thread{
 		int yPrev = positions[0][1];
 		int xNew, yNew;
 		
-		if(growth > 0) {	//If snake haven't reached full length add to the tail
+		if(growth > 0) {	//If snake hasn't reached full length add to the tail
 			size++;
 			growth--;
 		}

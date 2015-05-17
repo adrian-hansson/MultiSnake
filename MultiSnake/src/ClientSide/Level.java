@@ -28,7 +28,7 @@ public class Level extends JPanel{
 	
 	public Level(){
 		loadResources();
-		client = new Client(this, "hansson", 30000);	//need to find way to connect to other than "localhost"
+		client = new Client(this, "localhost", 30000);	//need to find way to connect to other than "localhost"
 	}
 	
 	public void update(int x, int y, int index){

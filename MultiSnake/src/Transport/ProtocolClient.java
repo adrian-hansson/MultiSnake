@@ -25,7 +25,6 @@ public class ProtocolClient {
 			is = socket.getInputStream();
 			os = socket.getOutputStream();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -78,7 +77,6 @@ public class ProtocolClient {
 			}
 			client.getLevel().repaint();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -92,7 +90,6 @@ public class ProtocolClient {
 			os.write(message);
 			System.out.println("Sent direction update:" + message[0] + " " + message[1]);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
