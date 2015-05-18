@@ -2,6 +2,7 @@ package ClientSide;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -25,11 +26,11 @@ public class Client extends Thread{
 	
 	Socket socket;
 	OutputStream out;
-	String address;
+	InetAddress address;
 	int port;
 	ProtocolClient protocol;
 	
-	public Client(Level level, String address, int port){
+	public Client(Level level, InetAddress address, int port){
 		this.level = level;
 		this.address = address;
 		this.port = port;

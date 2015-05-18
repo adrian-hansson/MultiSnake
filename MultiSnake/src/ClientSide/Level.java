@@ -30,12 +30,13 @@ public class Level extends JPanel{
 	
 	public Level(){
 		loadResources();
+		InetAddress address = null;
 		try {
-			InetAddress addr = InetAddress.getByName("83.251.168.36");
+			address = InetAddress.getByName("83.251.168.36");
 		} catch(UnknownHostException e) {
 			System.out.println("Could not connect to host");
 		}
-		client = new Client(this, "localhost", 30000);	//need to find way to connect to other than "localhost"
+		client = new Client(this, address, 30000);	//need to find way to connect to other than "localhost"
 	}
 	
 	public void update(int x, int y, int index){
