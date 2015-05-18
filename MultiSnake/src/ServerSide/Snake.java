@@ -178,7 +178,7 @@ public class Snake extends Thread{
 			break;
 			}
 		} else {
-			System.out.println("Buffer full, direction not added");
+			// Buffer full, direction not added
 		}
 	}
 	

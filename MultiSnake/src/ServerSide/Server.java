@@ -140,13 +140,15 @@ public class Server extends Thread{
 	private LinkedList<int[]> getCollisionCoords() {
 		LinkedList<int[]> Coords = new LinkedList<int[]>();
 		for(Snake s : snakes) {
-			int[][] positions = s.getPositions();
-			int size = s.getSize();
-			for(int i = 0; i < size; i++) {
-				int[] pos = new int[2];
-				pos[0] = positions[i][0];
-				pos[1] = positions[i][1];
-				Coords.offerFirst(pos);
+			if(!s.isDead()) {
+				int[][] positions = s.getPositions();
+				int size = s.getSize();
+				for(int i = 0; i < size; i++) {
+					int[] pos = new int[2];
+					pos[0] = positions[i][0];
+					pos[1] = positions[i][1];
+					Coords.offerFirst(pos);
+				}
 			}
 		}
 		return Coords;
