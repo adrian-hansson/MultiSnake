@@ -35,6 +35,7 @@ public class Snake extends Thread{
 	private int speed = 1; //default is 1xMap Speed
 	private int size = 1; //All snakes start with length 1
 	private int growth;
+	private int decay = 0;
 	private boolean isDead;
 	private LinkedList<Integer> dirBuffer = new LinkedList<Integer>();
 	
@@ -57,7 +58,7 @@ public class Snake extends Thread{
 		this.socket = socket;
 
 		protocol = new ProtocolServer(socket, this);
-		positions = new int[500][2];
+		positions = new int[2500][2];
 		
 		// Set start positions
 		positions[0][0] = posX;
@@ -143,7 +144,19 @@ public class Snake extends Thread{
 	}
 	
 	public void death(){
-		//calls when the snake dies
+		isDead = true;
+	}
+	
+	public boolean isDead() {
+		return isDead;
+	}
+	
+	public void decay() {
+		decay++;
+	}
+	
+	public int getDecay() {
+		return decay;
 	}
 	
 	public int getDirection(){
@@ -200,6 +213,14 @@ public class Snake extends Thread{
 	
 	public int getY(){
 		return positions[0][1]; //return posY for Snake Head
+	}
+	
+	public void setX(int newX) {
+		positions[0][0] = newX;
+	}
+	
+	public void setY(int newY) {
+		positions[0][1] = newY;
 	}
 	
 	private int finalDirection() {

@@ -4,7 +4,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -20,14 +22,19 @@ public class Level extends JPanel{
 	//------------------------------------------
 	// Resources
 	//------------------------------------------
-	private URL imageURL, headURL, appleURL; //URL of resource
-	private BufferedImage image, headImage, appleImage; //each section of the snake will be a small image like this
+	private URL imageURL, headURL, appleURL, headDeadURL, imageDeadURL; //URL of resource
+	private BufferedImage image, headImage, appleImage, headImageDead, ImageDead; //each section of the snake will be a small image like this
 	Client client;
 	private int x, y, index;
 	private LinkedList<GridObject> newGrid = new LinkedList<GridObject>();
 	
 	public Level(){
 		loadResources();
+		try {
+			InetAddress addr = InetAddress.getByName("83.251.168.36");
+		} catch(UnknownHostException e) {
+			System.out.println("Could not connect to host");
+		}
 		client = new Client(this, "localhost", 30000);	//need to find way to connect to other than "localhost"
 	}
 	
@@ -56,6 +63,10 @@ public class Level extends JPanel{
 				imageToDraw = headImage;
 			}else if(o.getIndex() == 2){
 				imageToDraw = appleImage;
+			}else if(o.getIndex() == 3){
+				imageToDraw = headImageDead;
+			}else if(o.getIndex() == 4){
+				imageToDraw = ImageDead;
 			}
 			try {
 				graphics.drawImage(imageToDraw, o.getX(), o.getY(), null);
@@ -82,11 +93,15 @@ public class Level extends JPanel{
 	private void loadResources(){
 		imageURL = (this.getClass().getResource("/resources/SnakeGreen.png"));
 		headURL = (this.getClass().getResource("/resources/SnakeHead.png"));
+		imageDeadURL = (this.getClass().getResource("/resources/SnakeGreenDead.png"));
+		headDeadURL = (this.getClass().getResource("/resources/SnakeHeadDead.png"));
 		appleURL = (this.getClass().getResource("/resources/AppleRed.png"));
 		try {
 			image = ImageIO.read(imageURL); //loads the image
 			headImage = ImageIO.read(headURL);
 			appleImage = ImageIO.read(appleURL);
+			headImageDead = ImageIO.read(headDeadURL);
+			ImageDead = ImageIO.read(imageDeadURL);
 		} catch (IOException e) {
 			System.out.println("Image failed to load");
 			e.printStackTrace();

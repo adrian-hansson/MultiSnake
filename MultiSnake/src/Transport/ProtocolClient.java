@@ -88,7 +88,6 @@ public class ProtocolClient {
 		message[1] = (byte) direction;
 		try {
 			os.write(message);
-			System.out.println("Sent direction update:" + message[0] + " " + message[1]);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

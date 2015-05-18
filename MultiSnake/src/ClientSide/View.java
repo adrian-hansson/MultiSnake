@@ -51,7 +51,7 @@ public class View implements KeyListener{
 		frmMultisnake = new JFrame();
 		frmMultisnake.setResizable(false);
 		frmMultisnake.setTitle("MultiSnake");
-		frmMultisnake.setBounds(100, 100, 512, 512);
+		frmMultisnake.setBounds(100, 100, 516, 539);
 		frmMultisnake.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmMultisnake.getContentPane().setLayout(new BorderLayout(0, 0));
 		
@@ -68,23 +68,15 @@ public class View implements KeyListener{
 	//------------------------------------------------
 	public void keyPressed(KeyEvent key) {
 		if(key.getKeyCode() == KeyEvent.VK_UP){
-			System.out.println("UP KEY");
-			//level.getPlayer().pressUp();
 			level.pressUp();
 		}
 		else if(key.getKeyCode() == KeyEvent.VK_DOWN){
-			System.out.println("DOWN KEY");
-			//level.getPlayer().pressDown();
 			level.pressDown();
 		}
 		else if(key.getKeyCode() == KeyEvent.VK_LEFT){
-			System.out.println("LEFT KEY");
-			//level.getPlayer().pressLeft();
 			level.pressLeft();
 		}
 		else if(key.getKeyCode() == KeyEvent.VK_RIGHT){
-			System.out.println("RIGHT KEY");
-			//level.getPlayer().pressRight();
 			level.pressRight();
 		}
 		

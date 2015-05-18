@@ -49,7 +49,6 @@ public class Client extends Thread{
 	
 	public void sendToServer(int i){
 		protocol.clientWrite(i);
-		//stuff from client to server
 	}
 	
 	public void run(){
