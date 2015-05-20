@@ -34,7 +34,7 @@ public class Level extends JPanel{
 		loadResources();
 		InetAddress address = null;
 		try {
-			address = InetAddress.getByName("127.0.0.1");
+			address = InetAddress.getByName("83.251.168.36");
 		} catch(UnknownHostException e) {
 			System.out.println("Could not connect to host");
 		}

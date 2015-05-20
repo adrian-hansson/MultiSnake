@@ -10,15 +10,20 @@ import java.awt.BorderLayout;
 import javax.swing.JPanel;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.net.Socket;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
 
-public class View implements KeyListener{
+public class View implements KeyListener, ActionListener{
 
 	private JFrame frmMultisnake;
+	Socket socket;
 	Level level;
 
 	/**
@@ -48,6 +53,10 @@ public class View implements KeyListener{
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		
+		
+		
+		
 		frmMultisnake = new JFrame();
 		frmMultisnake.setResizable(false);
 		frmMultisnake.setTitle("MultiSnake");
@@ -57,11 +66,17 @@ public class View implements KeyListener{
 		
 		level = new Level();
 		level.setToolTipText("");
-		level.setBackground(new Color(160, 82, 45));
+		level.setBackground(new Color(165, 98, 67));
 		frmMultisnake.getContentPane().add(level, BorderLayout.CENTER);
 		frmMultisnake.addKeyListener(this);
 	}
 
+	//------------------------------------------------
+	//        ACTION LISTENER PART
+	//------------------------------------------------
+	public void actionPerformed(ActionEvent evt) {
+		System.out.println("");
+	}
 	
 	//------------------------------------------------
 	//        KEY LISTENER PART
