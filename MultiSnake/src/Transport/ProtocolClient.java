@@ -11,6 +11,7 @@ import ClientSide.Client;
 public class ProtocolClient {
 	private static final int UPDATELEVEL = 0;
 	private static final int UPDATEDIRECTION = 1;
+	private static final int SERVERFULL = 2;
 
 	private Socket socket;
 	private InputStream is;
@@ -69,6 +70,9 @@ public class ProtocolClient {
 					break;
 				case UPDATEDIRECTION:
 					System.out.println("error, client doesnt get direction updates");
+					break;
+				case SERVERFULL:
+					System.out.println("Could not connect, server is full");
 					break;
 				default:
 					System.out.println("error");

@@ -22,11 +22,13 @@ public class Level extends JPanel{
 	//------------------------------------------
 	// Resources
 	//------------------------------------------
-	private URL imageURL, headURL, appleURL, headDeadURL, imageDeadURL; //URL of resource
-	private BufferedImage image, headImage, appleImage, headImageDead, ImageDead; //each section of the snake will be a small image like this
+	private URL urlAPPLE, urlSNAKEHEADDEAD, urlSNAKEBODYDEAD, urlSNAKEGREENBODY, urlSNAKEGREENHEAD, urlSNAKEGREENBODYGHOST, urlSNAKEGREENHEADGHOST, urlSNAKEBLUEBODY, urlSNAKEBLUEHEAD, urlSNAKEBLUEBODYGHOST, urlSNAKEBLUEHEADGHOST, urlSNAKEYELLOWBODY, urlSNAKEYELLOWHEAD, urlSNAKEYELLOWBODYGHOST, urlSNAKEYELLOWHEADGHOST, urlSNAKEPURPLEBODY, urlSNAKEPURPLEHEAD, urlSNAKEPURPLEBODYGHOST, urlSNAKEPURPLEHEADGHOST; 
+	private BufferedImage imageAPPLE, imageSNAKEHEADDEAD, imageSNAKEBODYDEAD, imageSNAKEGREENBODY, imageSNAKEGREENHEAD, imageSNAKEGREENBODYGHOST, imageSNAKEGREENHEADGHOST, imageSNAKEBLUEBODY, imageSNAKEBLUEHEAD, imageSNAKEBLUEBODYGHOST, imageSNAKEBLUEHEADGHOST, imageSNAKEYELLOWBODY, imageSNAKEYELLOWHEAD, imageSNAKEYELLOWBODYGHOST, imageSNAKEYELLOWHEADGHOST, imageSNAKEPURPLEBODY, imageSNAKEPURPLEHEAD, imageSNAKEPURPLEBODYGHOST, imageSNAKEPURPLEHEADGHOST; 
 	Client client;
 	private int x, y, index;
 	private LinkedList<GridObject> newGrid = new LinkedList<GridObject>();
+	
+	private static final int APPLE = 0, SNAKEHEADDEAD = 1, SNAKEBODYDEAD = 2, SNAKEGREENBODY = 3, SNAKEGREENHEAD = 4, SNAKEGREENBODYGHOST = 5, SNAKEGREENHEADGHOST = 6, SNAKEBLUEBODY = 7, SNAKEBLUEHEAD = 8, SNAKEBLUEBODYGHOST = 9, SNAKEBLUEHEADGHOST = 10, SNAKEYELLOWBODY = 11, SNAKEYELLOWHEAD = 12, SNAKEYELLOWBODYGHOST = 13, SNAKEYELLOWHEADGHOST = 14, SNAKEPURPLEBODY = 15, SNAKEPURPLEHEAD = 16, SNAKEPURPLEBODYGHOST = 17, SNAKEPURPLEHEADGHOST = 18;
 	
 	public Level(){
 		loadResources();
@@ -36,7 +38,7 @@ public class Level extends JPanel{
 		} catch(UnknownHostException e) {
 			System.out.println("Could not connect to host");
 		}
-		client = new Client(this, address, 30000);	//need to find way to connect to other than "localhost"
+		client = new Client(this, address, 30000);
 	}
 	
 	public void update(int x, int y, int index){
@@ -58,16 +60,44 @@ public class Level extends JPanel{
 		while(!newGrid.isEmpty()) {
 			o = newGrid.poll();
 			BufferedImage imageToDraw = null;
-			if(o.getIndex() == 1) {
-				imageToDraw = image;
-			}else if(o.getIndex() == 0){
-				imageToDraw = headImage;
-			}else if(o.getIndex() == 2){
-				imageToDraw = appleImage;
-			}else if(o.getIndex() == 3){
-				imageToDraw = headImageDead;
-			}else if(o.getIndex() == 4){
-				imageToDraw = ImageDead;
+			if(o.getIndex() == APPLE) {
+				imageToDraw = imageAPPLE;
+			}else if(o.getIndex() == SNAKEHEADDEAD){
+				imageToDraw = imageSNAKEHEADDEAD;
+			}else if(o.getIndex() == SNAKEBODYDEAD){
+				imageToDraw = imageSNAKEBODYDEAD;
+			}else if(o.getIndex() == SNAKEGREENBODY){
+				imageToDraw = imageSNAKEGREENBODY;
+			}else if(o.getIndex() == SNAKEGREENHEAD){
+				imageToDraw = imageSNAKEGREENHEAD;
+			}else if(o.getIndex() == SNAKEGREENBODYGHOST){
+				imageToDraw = imageSNAKEGREENBODYGHOST;
+			}else if(o.getIndex() == SNAKEGREENHEADGHOST){
+				imageToDraw = imageSNAKEGREENHEADGHOST;
+			}else if(o.getIndex() == SNAKEBLUEBODY){
+				imageToDraw = imageSNAKEBLUEBODY;
+			}else if(o.getIndex() == SNAKEBLUEHEAD){
+				imageToDraw = imageSNAKEBLUEHEAD;
+			}else if(o.getIndex() == SNAKEBLUEBODYGHOST){
+				imageToDraw = imageSNAKEBLUEBODYGHOST;
+			}else if(o.getIndex() == SNAKEBLUEHEADGHOST){
+				imageToDraw = imageSNAKEBLUEHEADGHOST;
+			}else if(o.getIndex() == SNAKEYELLOWBODY){
+				imageToDraw = imageSNAKEYELLOWBODY;
+			}else if(o.getIndex() == SNAKEYELLOWHEAD){
+				imageToDraw = imageSNAKEYELLOWHEAD;
+			}else if(o.getIndex() == SNAKEYELLOWBODYGHOST){
+				imageToDraw = imageSNAKEYELLOWBODYGHOST;
+			}else if(o.getIndex() == SNAKEYELLOWHEADGHOST){
+				imageToDraw = imageSNAKEYELLOWHEADGHOST;
+			}else if(o.getIndex() == SNAKEPURPLEBODY){
+				imageToDraw = imageSNAKEPURPLEBODY;
+			}else if(o.getIndex() == SNAKEPURPLEHEAD){
+				imageToDraw = imageSNAKEPURPLEHEAD;
+			}else if(o.getIndex() == SNAKEPURPLEBODYGHOST){
+				imageToDraw = imageSNAKEPURPLEBODYGHOST;
+			}else if(o.getIndex() == SNAKEPURPLEHEADGHOST){
+				imageToDraw = imageSNAKEPURPLEHEADGHOST;
 			}
 			try {
 				graphics.drawImage(imageToDraw, o.getX(), o.getY(), null);
@@ -92,17 +122,45 @@ public class Level extends JPanel{
 	}
 	
 	private void loadResources(){
-		imageURL = (this.getClass().getResource("/resources/SnakeGreen.png"));
-		headURL = (this.getClass().getResource("/resources/SnakeHead.png"));
-		imageDeadURL = (this.getClass().getResource("/resources/SnakeGreenDead.png"));
-		headDeadURL = (this.getClass().getResource("/resources/SnakeHeadDead.png"));
-		appleURL = (this.getClass().getResource("/resources/AppleRed.png"));
+		urlAPPLE  = (this.getClass().getResource("/resources/AppleRed.png"));
+		urlSNAKEHEADDEAD  = (this.getClass().getResource("/resources/SnakeHeadDead.png"));
+		urlSNAKEBODYDEAD  = (this.getClass().getResource("/resources/SnakeBodyDead.png"));
+		urlSNAKEGREENBODY  = (this.getClass().getResource("/resources/SnakeGreenBody.png"));
+		urlSNAKEGREENHEAD  = (this.getClass().getResource("/resources/SnakeGreenHead.png"));
+		urlSNAKEGREENBODYGHOST  = (this.getClass().getResource("/resources/SnakeGreenBodyGhost.png"));
+		urlSNAKEGREENHEADGHOST  = (this.getClass().getResource("/resources/SnakeGreenHeadGhost.png"));
+		urlSNAKEBLUEBODY  = (this.getClass().getResource("/resources/SnakeBlueBody.png"));
+		urlSNAKEBLUEHEAD  = (this.getClass().getResource("/resources/SnakeBlueHead.png"));
+		urlSNAKEBLUEBODYGHOST  = (this.getClass().getResource("/resources/SnakeBlueBodyGhost.png"));
+		urlSNAKEBLUEHEADGHOST  = (this.getClass().getResource("/resources/SnakeBlueHeadGhost.png"));
+		urlSNAKEYELLOWBODY  = (this.getClass().getResource("/resources/SnakeYellowBody.png"));
+		urlSNAKEYELLOWHEAD  = (this.getClass().getResource("/resources/SnakeYellowHead.png"));
+		urlSNAKEYELLOWBODYGHOST  = (this.getClass().getResource("/resources/SnakeYellowBodyGhost.png"));
+		urlSNAKEYELLOWHEADGHOST  = (this.getClass().getResource("/resources/SnakeYellowHeadGhost.png"));
+		urlSNAKEPURPLEBODY  = (this.getClass().getResource("/resources/SnakePurpleBody.png"));
+		urlSNAKEPURPLEHEAD  = (this.getClass().getResource("/resources/SnakePurpleHead.png"));
+		urlSNAKEPURPLEBODYGHOST  = (this.getClass().getResource("/resources/SnakePurpleBodyGhost.png"));
+		urlSNAKEPURPLEHEADGHOST  = (this.getClass().getResource("/resources/SnakePurpleHeadGhost.png"));
 		try {
-			image = ImageIO.read(imageURL); //loads the image
-			headImage = ImageIO.read(headURL);
-			appleImage = ImageIO.read(appleURL);
-			headImageDead = ImageIO.read(headDeadURL);
-			ImageDead = ImageIO.read(imageDeadURL);
+			imageAPPLE = ImageIO.read(urlAPPLE);
+			imageSNAKEHEADDEAD = ImageIO.read(urlSNAKEHEADDEAD);
+			imageSNAKEBODYDEAD = ImageIO.read(urlSNAKEBODYDEAD);
+			imageSNAKEGREENBODY = ImageIO.read(urlSNAKEGREENBODY);
+			imageSNAKEGREENHEAD = ImageIO.read(urlSNAKEGREENHEAD);
+			imageSNAKEGREENBODYGHOST = ImageIO.read(urlSNAKEGREENBODYGHOST);
+			imageSNAKEGREENHEADGHOST = ImageIO.read(urlSNAKEGREENHEADGHOST);
+			imageSNAKEBLUEBODY = ImageIO.read(urlSNAKEBLUEBODY);
+			imageSNAKEBLUEHEAD = ImageIO.read(urlSNAKEBLUEHEAD);
+			imageSNAKEBLUEBODYGHOST = ImageIO.read(urlSNAKEBLUEBODYGHOST);
+			imageSNAKEBLUEHEADGHOST = ImageIO.read(urlSNAKEBLUEHEADGHOST);
+			imageSNAKEYELLOWBODY = ImageIO.read(urlSNAKEYELLOWBODY);
+			imageSNAKEYELLOWHEAD = ImageIO.read(urlSNAKEYELLOWHEAD);
+			imageSNAKEYELLOWBODYGHOST = ImageIO.read(urlSNAKEYELLOWBODYGHOST);
+			imageSNAKEYELLOWHEADGHOST = ImageIO.read(urlSNAKEYELLOWHEADGHOST);
+			imageSNAKEPURPLEBODY = ImageIO.read(urlSNAKEPURPLEBODY);
+			imageSNAKEPURPLEHEAD = ImageIO.read(urlSNAKEPURPLEHEAD);
+			imageSNAKEPURPLEBODYGHOST = ImageIO.read(urlSNAKEPURPLEBODYGHOST);
+			imageSNAKEPURPLEHEADGHOST = ImageIO.read(urlSNAKEPURPLEHEADGHOST);
 		} catch (IOException e) {
 			System.out.println("Image failed to load");
 			e.printStackTrace();

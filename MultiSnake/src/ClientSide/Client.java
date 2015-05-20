@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
@@ -25,7 +26,6 @@ public class Client extends Thread{
 	Snake snake;
 	
 	Socket socket;
-	OutputStream out;
 	InetAddress address;
 	int port;
 	ProtocolClient protocol;
@@ -42,7 +42,6 @@ public class Client extends Thread{
 		try{
 			socket = new Socket(address, port);
 			protocol = new ProtocolClient(socket, this);
-			out = socket.getOutputStream();
 		}catch(IOException e){
 			e.printStackTrace();
 		}
@@ -56,6 +55,7 @@ public class Client extends Thread{
 		while(true){
 			protocol.clientRead();
 		}
+	
 	}
 	
 	public Level getLevel(){

@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.net.Socket;
 import java.net.URL;
 import java.util.LinkedList;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 
@@ -34,9 +35,14 @@ public class Snake extends Thread{
 	private int direction; //which direction is the snake heading in. This value should be sent to the server, so that it knows how to move the snake
 	private int speed = 1; //default is 1xMap Speed
 	private int size = 1; //All snakes start with length 1
+	private int startGrowth;
+	private int mapSize;
 	private int growth;
+	private int haunttime = 0;
 	private int decay = 0;
+	private int color;
 	private boolean isDead;
+	private boolean isGhost;
 	private LinkedList<Integer> dirBuffer = new LinkedList<Integer>();
 	
 	//------------------------------------------
@@ -52,19 +58,25 @@ public class Snake extends Thread{
 	private ProtocolServer protocol;
 	private Socket socket;
 	
-	public Snake(Server server, Socket socket, int posX, int posY, int growth){
+	public Snake(Server server, Socket socket, int mapSize, int growth, int color){
 		this.server = server;
-		this.growth = growth;
+		startGrowth = growth;
+		this.growth = startGrowth;
+		this.color = color;
 		this.socket = socket;
+		this.mapSize = mapSize;
+		isDead = false;
+		isGhost = true;
 
 		protocol = new ProtocolServer(socket, this);
 		positions = new int[2500][2];
 		
 		// Set start positions
-		positions[0][0] = posX;
-		positions[0][1] = posY;
+		Random rand = new Random();
+		positions[0][0] = 10*rand.nextInt((mapSize/10)-1);
+		positions[0][1] = 10*rand.nextInt((mapSize/10)-1);
 
-		direction = Snake.MOVING_UP;
+		direction = rand.nextInt(4);
 
 		this.start();
 	}
@@ -143,8 +155,35 @@ public class Snake extends Thread{
 		this.growth = this.growth + growth; 
 	}
 	
+	public void revive() {
+		positions = new int[2500][2];
+		Random rand = new Random();
+		positions[0][0] = 10*rand.nextInt((mapSize/10)-1);
+		positions[0][1] = 10*rand.nextInt((mapSize/10)-1);
+		direction = rand.nextInt(4);
+		
+		size = 1;
+		growth = startGrowth;
+		decay = 0;
+		isDead = false;
+		isGhost = true;
+	}
+	
 	public void death(){
 		isDead = true;
+	}
+	
+	public boolean isGhost() {
+		return isGhost;
+	}
+	
+	public void haunt() {
+		if(haunttime<20) {
+			haunttime++;
+		} else {
+			haunttime = 0;
+			isGhost = false;
+		}
 	}
 	
 	public boolean isDead() {
@@ -236,6 +275,10 @@ public class Snake extends Thread{
 	
 	public int getSize(){
 		return size;
+	}
+	
+	public int getColor() {
+		return color;
 	}
 	
 	public ProtocolServer getProtocol(){

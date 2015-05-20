@@ -17,12 +17,24 @@ import ClientSide.View;
 
 public class Server extends Thread{
 	
+	private static final int GREEN = 0;
+	private static final int YELLOW = 1;
+	private static final int BLUE = 2;
+	private static final int PURPLE = 3;
+	private static final int APPLE = 0, SNAKEHEADDEAD = 1, SNAKEBODYDEAD = 2, SNAKEGREENBODY = 3, SNAKEGREENHEAD = 4, SNAKEGREENBODYGHOST = 5, SNAKEGREENHEADGHOST = 6, SNAKEBLUEBODY = 7, SNAKEBLUEHEAD = 8, SNAKEBLUEBODYGHOST = 9, SNAKEBLUEHEADGHOST = 10, SNAKEYELLOWBODY = 11, SNAKEYELLOWHEAD = 12, SNAKEYELLOWBODYGHOST = 13, SNAKEYELLOWHEADGHOST = 14, SNAKEPURPLEBODY = 15, SNAKEPURPLEHEAD = 16, SNAKEPURPLEBODYGHOST = 17, SNAKEPURPLEHEADGHOST = 18;
+	
 	ArrayList<Snake> snakes;
+	LinkedList<Integer> colors;
 	int appleX, appleY;
 	int mapSize = 500; //must be divisible by 10
 	
 	public Server(){
 		snakes = new ArrayList<Snake>();
+		colors = new LinkedList<Integer>();
+		colors.add(GREEN);
+		colors.add(YELLOW);
+		colors.add(BLUE);
+		colors.add(PURPLE);
 		newApple();
 	}
 	
@@ -48,12 +60,18 @@ public class Server extends Thread{
 	public void updateAndSendSnakes(){
 		
 		for(Snake s : snakes){
-			if(!s.isDead()) {
+			if(s.isGhost()) {
+				s.move();
+				checkBorder(s);
+				s.haunt();
+			} else if(!s.isDead()) {
 				s.move();
 				checkBorder(s);
 			} else {
-				if(s.getDecay() < 10) {
+				if(s.getDecay() < 20) {
 					s.decay();
+				} else {
+					s.revive();
 				}
 			}
 		}
@@ -62,25 +80,62 @@ public class Server extends Thread{
 		LinkedList<int[]> CollisionCoords = getCollisionCoords();
 		
 		for(Snake s : snakes){
-			if(countCollisions(CollisionCoords, s.getX(), s.getY()) > 1) {
-				s.death();
+			if(!s.isGhost() && !s.isDead()) {
+				if(countCollisions(CollisionCoords, s.getX(), s.getY()) > 1) {
+					s.death();
+				}
 			}
-			
-			if(s.getDecay() < 10) {
+			if(s.getDecay() < 20) {
 				int[][] positions = s.getPositions();
 				for(int i = 0; i < s.getSize(); ++i){
 					if(i == 0){
 						if(s.isDead()) {
-							listToSend.addFirst(3);
+							listToSend.addFirst(SNAKEHEADDEAD);
+						} else if(s.isGhost()) {
+							if(s.getColor() == GREEN){
+								listToSend.addFirst(SNAKEGREENHEADGHOST);
+							} else if(s.getColor() == YELLOW){
+								listToSend.addFirst(SNAKEYELLOWHEADGHOST);
+							} else if(s.getColor() == BLUE){
+								listToSend.addFirst(SNAKEBLUEHEADGHOST);
+							} else if(s.getColor() == PURPLE){
+								listToSend.addFirst(SNAKEPURPLEHEADGHOST);
+							}
 						} else {
-							listToSend.addFirst(0);
+							if(s.getColor() == GREEN){
+								listToSend.addFirst(SNAKEGREENHEAD);
+							} else if(s.getColor() == YELLOW){
+								listToSend.addFirst(SNAKEYELLOWHEAD);
+							} else if(s.getColor() == BLUE){
+								listToSend.addFirst(SNAKEBLUEHEAD);
+							} else if(s.getColor() == PURPLE){
+								listToSend.addFirst(SNAKEPURPLEHEAD);
+							}
 						}
 					}
 					else{
 						if(s.isDead()) {
-							listToSend.addFirst(4);
+							listToSend.addFirst(SNAKEBODYDEAD);
+						} else if(s.isGhost()) {
+							if(s.getColor() == GREEN){
+								listToSend.addFirst(SNAKEGREENBODYGHOST);
+							} else if(s.getColor() == YELLOW){
+								listToSend.addFirst(SNAKEYELLOWBODYGHOST);
+							} else if(s.getColor() == BLUE){
+								listToSend.addFirst(SNAKEBLUEBODYGHOST);
+							} else if(s.getColor() == PURPLE){
+								listToSend.addFirst(SNAKEPURPLEBODYGHOST);
+							}
 						} else {
-							listToSend.addFirst(1);
+							if(s.getColor() == GREEN){
+								listToSend.addFirst(SNAKEGREENBODY);
+							} else if(s.getColor() == YELLOW){
+								listToSend.addFirst(SNAKEYELLOWBODY);
+							} else if(s.getColor() == BLUE){
+								listToSend.addFirst(SNAKEBLUEBODY);
+							} else if(s.getColor() == PURPLE){
+								listToSend.addFirst(SNAKEPURPLEBODY);
+							}
 						}	
 					}
 					listToSend.addFirst(positions[i][1]);
@@ -95,7 +150,7 @@ public class Server extends Thread{
 		//Add apple position
 		listToSend.add(appleX);
 		listToSend.add(appleY);
-		listToSend.add(2);
+		listToSend.add(APPLE);
 		
 		int[] positionsToSend = new int[listToSend.size()];
 		for(int i = 0; i<positionsToSend.length; ++i){
@@ -107,12 +162,13 @@ public class Server extends Thread{
 	}
 	
 	public void removeSnake(Snake s) {
+		colors.add(s.getColor());
 		snakes.remove(s);
 	}
 	
 	public void isAtApple(){
 		for(Snake s : snakes){
-			if(s.getX() == appleX && s.getY() == appleY){
+			if(s.getX() == appleX && s.getY() == appleY && !s.isGhost()){
 				eatApple(s);
 				break;
 			}
@@ -133,14 +189,15 @@ public class Server extends Thread{
 		} while(checkCollision(Coords, appleX, appleY));
 	}
 	
-	public void addSnake(Socket socket, int startX, int startY, int startLength) {
-		snakes.add(new Snake(this, socket, startX, startY, startLength));
+	public void addSnake(Socket socket, int startLength) {
+		snakes.add(new Snake(this, socket, mapSize, startLength, colors.poll()));
 	}
+	
 	
 	private LinkedList<int[]> getCollisionCoords() {
 		LinkedList<int[]> Coords = new LinkedList<int[]>();
 		for(Snake s : snakes) {
-			if(!s.isDead()) {
+			if(!s.isDead() && !s.isGhost()) {
 				int[][] positions = s.getPositions();
 				int size = s.getSize();
 				for(int i = 0; i < size; i++) {
@@ -191,5 +248,9 @@ public class Server extends Thread{
 		} else if(s.getY() > 500) {
 			s.setY(0);
 		}
+	}
+	
+	public boolean isFull() {
+		return colors.isEmpty();
 	}
 }
