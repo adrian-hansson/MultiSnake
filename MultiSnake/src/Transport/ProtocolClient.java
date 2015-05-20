@@ -75,6 +75,7 @@ public class ProtocolClient {
 					System.out.println("Could not connect, server is full");
 					break;
 				default:
+					System.out.println("Command was: " + command);
 					System.out.println("error");
 					break;
 				}
