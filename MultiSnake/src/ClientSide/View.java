@@ -14,6 +14,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.Socket;
 
 import javax.swing.GroupLayout;
@@ -23,23 +25,21 @@ import javax.swing.JTextField;
 public class View implements KeyListener, ActionListener{
 
 	private JFrame frmMultisnake;
-	Socket socket;
+	JTextField textField;
+	Socket socket = null;
+	boolean connected = false;
 	Level level;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					View window = new View();
-					window.frmMultisnake.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		try {
+			View window = new View();
+			window.frmMultisnake.setVisible(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -53,9 +53,7 @@ public class View implements KeyListener, ActionListener{
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		
-		
-		
+		connectToServer();
 		
 		frmMultisnake = new JFrame();
 		frmMultisnake.setResizable(false);
@@ -64,18 +62,53 @@ public class View implements KeyListener, ActionListener{
 		frmMultisnake.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmMultisnake.getContentPane().setLayout(new BorderLayout(0, 0));
 		
-		level = new Level();
+		level = new Level(socket);
 		level.setToolTipText("");
 		level.setBackground(new Color(165, 98, 67));
 		frmMultisnake.getContentPane().add(level, BorderLayout.CENTER);
 		frmMultisnake.addKeyListener(this);
+	}
+	
+	private void connectToServer() {
+		JFrame jf = new JFrame();
+		jf.setResizable(false);
+		jf.setBounds(10, 10, 300, 50);
+		jf.setTitle("Connect to server");
+		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		textField = new JTextField(50);
+		textField.addActionListener(this);
+        jf.add(textField);
+        jf.setVisible(true);
+		while(!connected) {
+			try {
+				Thread.sleep(500);
+			} catch(InterruptedException e) {
+				System.out.println("Could not pause Thread");
+			}
+		}
+		jf.dispose();
 	}
 
 	//------------------------------------------------
 	//        ACTION LISTENER PART
 	//------------------------------------------------
 	public void actionPerformed(ActionEvent evt) {
-		System.out.println("");
+		try{
+			socket = new Socket(textField.getText(), 30000);
+			InputStream is = socket.getInputStream();
+			byte[] msg = new byte[60000];
+			is.read(msg);
+			String message = new String(msg);
+			if(message.startsWith("Connected to server")) {
+				textField.setText("Connected to server");
+				connected = true;
+			} else {
+				textField.setText("That server is full");
+			}
+		} catch(IOException ie) {
+			textField.setText("Could not connect to that IP-adress");
+			System.out.println("Caught IO");
+		}
 	}
 	
 	//------------------------------------------------

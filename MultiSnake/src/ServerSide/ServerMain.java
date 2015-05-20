@@ -27,20 +27,29 @@ public class ServerMain {
 				System.out.println("Could not open socket");
 			}
 			if(!server.isFull()) {
+				OutputStream os = null;
 				server.addSnake(socket, 5);
-				System.out.println("Connected!");
+				try {
+					os = socket.getOutputStream();
+					String message = "Connected to server";
+					byte[] msg = message.getBytes();
+					os.write(msg);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				System.out.println("Client connected!");
 			} else {
-				System.out.println("Client tried to connect but server is full");
 				OutputStream os = null;
 				try {
 					os = socket.getOutputStream();
-					byte[] mess = new byte[1];
-					mess[0] = 2; 
-					os.write(mess);
+					String message = "Server is full";
+					byte[] msg = message.getBytes();
+					os.write(msg);
 					socket.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+				System.out.println("Client tried to connect but server is full");
 			}
 		}
 

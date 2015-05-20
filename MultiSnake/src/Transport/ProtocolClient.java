@@ -82,6 +82,8 @@ public class ProtocolClient {
 			client.getLevel().repaint();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (NegativeArraySizeException ne) {
+			System.out.println("Somehow messagSize variable is negative... NegativeArraySizeException caught");
 		}
 
 	}

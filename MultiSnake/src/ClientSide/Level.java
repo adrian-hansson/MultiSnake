@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.Socket;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -30,15 +31,9 @@ public class Level extends JPanel{
 	
 	private static final int APPLE = 0, SNAKEHEADDEAD = 1, SNAKEBODYDEAD = 2, SNAKEGREENBODY = 3, SNAKEGREENHEAD = 4, SNAKEGREENBODYGHOST = 5, SNAKEGREENHEADGHOST = 6, SNAKEBLUEBODY = 7, SNAKEBLUEHEAD = 8, SNAKEBLUEBODYGHOST = 9, SNAKEBLUEHEADGHOST = 10, SNAKEYELLOWBODY = 11, SNAKEYELLOWHEAD = 12, SNAKEYELLOWBODYGHOST = 13, SNAKEYELLOWHEADGHOST = 14, SNAKEPURPLEBODY = 15, SNAKEPURPLEHEAD = 16, SNAKEPURPLEBODYGHOST = 17, SNAKEPURPLEHEADGHOST = 18;
 	
-	public Level(){
+	public Level(Socket socket){
 		loadResources();
-		InetAddress address = null;
-		try {
-			address = InetAddress.getByName("83.251.168.36");
-		} catch(UnknownHostException e) {
-			System.out.println("Could not connect to host");
-		}
-		client = new Client(this, address, 30000);
+		client = new Client(this, socket, 30000);
 	}
 	
 	public void update(int x, int y, int index){

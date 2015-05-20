@@ -26,25 +26,19 @@ public class Client extends Thread{
 	Snake snake;
 	
 	Socket socket;
-	InetAddress address;
 	int port;
 	ProtocolClient protocol;
 	
-	public Client(Level level, InetAddress address, int port){
+	public Client(Level level, Socket socket, int port){
 		this.level = level;
-		this.address = address;
+		this.socket = socket;
 		this.port = port;
 		initiate();
 		this.start();
 	}
 	
 	private void initiate(){
-		try{
-			socket = new Socket(address, port);
-			protocol = new ProtocolClient(socket, this);
-		}catch(IOException e){
-			e.printStackTrace();
-		}
+		protocol = new ProtocolClient(socket, this);
 	}
 	
 	public void sendToServer(int i){
