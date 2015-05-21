@@ -64,7 +64,7 @@ public class ProtocolClient {
 			int tempSize = dis.readInt();
 			int[] ints = new int[tempSize];
 			
-			System.out.println("Received Size: "+tempSize);
+			//System.out.println("Received Size: "+tempSize);
 			for(int i = 0; i < tempSize; i++){
 				ints[i] = dis.readInt();
 			}

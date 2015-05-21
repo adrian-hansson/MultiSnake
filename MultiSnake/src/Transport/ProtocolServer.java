@@ -106,7 +106,7 @@ public class ProtocolServer {
 	public void serverWrite(int[] positions) {
 		
 		try {
-			System.out.println("Sending Size: "+positions.length);
+			//System.out.println("Sending Size: "+positions.length);
 			dos.writeInt(positions.length);
 			for(int i = 0; i< positions.length; ++i){
 				dos.writeInt(positions[i]);

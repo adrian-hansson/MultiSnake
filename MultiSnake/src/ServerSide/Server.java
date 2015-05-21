@@ -176,7 +176,7 @@ public class Server extends Thread{
 	}
 	
 	public void eatApple(Snake snake){
-		snake.addTail(5);
+		snake.addTail(1);
 		newApple();
 	}
 	
