@@ -30,10 +30,13 @@ public class ProtocolServer {
 	}
 
 	private int convertToInt(byte[] b, int offset) {
-		int a = (b[0 + offset] << 24) & 0xFF000000;
-		int k = (b[1 + offset] << 16) & 0x00FF0000;
-		int c = (b[2 + offset] << 8) & 0x0000FF00;
-		int d = b[3 + offset] & 0x000000FF;
+		int a = b[0 + offset] & 0xFF;
+		a = a << 24;
+		int k = b[1 + offset] & 0xFF;
+		k = k << 16;
+		int c = b[2 + offset] & 0xFF;
+		c = c << 8;
+		int d = b[3 + offset] & 0xFF;
 		int res = a | k | c | d;
 		
 		return res;
@@ -77,13 +80,18 @@ public class ProtocolServer {
 	}
 
 	public void serverWrite(int[] positions) {
+		System.out.println("1");
 		byte[] message = new byte[4*positions.length + 5];
+		System.out.println("2");
 		convertToByteArray(4*positions.length + 1, message, 0);
+		System.out.println("3");
 		message[4] = (byte) UPDATELEVEL;
+		System.out.println("4");
 		for(int i = 0; i< positions.length; ++i){
 			convertToByteArray(positions[i], message, 4*i +5);
 		}
 		try {
+			System.out.println("5");
 			os.write(message);
 		} catch (IOException e) {
 			e.printStackTrace();
