@@ -4,6 +4,8 @@
 
 MultiSnake is a multiplayer game based on the popular game Snake. Two or more players will control their own snake with the goal of reaching and eat apples in order to grow. All while avoiding colliding with the edges of the game level.. and other players!
 
+Official website: http://adense13.github.io/multisnake/
+
 ## Controls
 
 - `ARROW UP` - change direction to UP
