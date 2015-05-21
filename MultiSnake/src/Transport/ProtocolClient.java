@@ -1,5 +1,7 @@
 package Transport;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -18,6 +20,9 @@ public class ProtocolClient {
 	private OutputStream os;
 	private Client client;
 	private Snake snake;
+	
+	DataOutputStream dos;
+	DataInputStream dis;
 
 	public ProtocolClient(Socket socket, Client client){
 		this.socket = socket;
@@ -25,6 +30,10 @@ public class ProtocolClient {
 		try {
 			is = socket.getInputStream();
 			os = socket.getOutputStream();
+			
+			//TEST
+			dos = new DataOutputStream(os);
+			dis = new DataInputStream(is);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -52,33 +61,76 @@ public class ProtocolClient {
 	public void clientRead() {
 
 		try {
-			byte[] temp = new byte[4];
-			is.read(temp);
-
-			int messageSize = convertToInt(temp, 0);
-			byte[] message = new byte[messageSize];
-			is.read(message);
+			int tempSize = dis.readInt();
+			int[] ints = new int[tempSize];
 			
-			for (int i = 0; i < (messageSize-1)/4; i++) {
-				int command = (int) message[0];
-				switch (command) {
-				case UPDATELEVEL:
-					int x = convertToInt(message, 4*i +1);
-					int y = convertToInt(message,4*++i +1);
-					int imageIndex = convertToInt(message,4*++i +1);
-					client.getLevel().update(x, y, imageIndex);
-					break;
-				case UPDATEDIRECTION:
-					System.out.println("error, client doesnt get direction updates");
-					break;
-				case SERVERFULL:
-					System.out.println("Could not connect, server is full");
-					break;
-				default:
-					System.out.println("error");
-					break;
-				}
+			System.out.println("Received Size: "+tempSize);
+			for(int i = 0; i < tempSize; i++){
+				ints[i] = dis.readInt();
 			}
+			
+			for (int i = 0; i < ints.length-2; i++) {
+				//int command = ints[i];
+				int x = ints[i];
+				int y = ints[i+1];
+				int imageIndex = ints[i+2];
+				client.getLevel().update(x,  y,  imageIndex);
+				i = i+2;
+				
+//				switch (command) {
+//				case UPDATELEVEL:
+//					int x = ints[i+1];
+//					int y = ints[i+2];
+//					int imageIndex = ints[i+3];
+//					client.getLevel().update(x,  y,  imageIndex);
+//					i = i+3;
+//					break;
+//				case UPDATEDIRECTION:
+//					System.out.println("error, client doesnt get direction updates");
+//					break;
+//				case SERVERFULL:
+//					System.out.println("Could not connect, server is full");
+//					break;
+//				default:
+//					System.out.println("error");
+//					break;
+//				}
+			}
+			
+			
+//			byte[] temp = new byte[4];
+//			is.read(temp);
+//
+//			
+//			
+//			
+//			
+//			
+//			int messageSize = convertToInt(temp, 0);
+//			System.out.println("MessageSize: "+messageSize); //temp edit
+//			byte[] message = new byte[messageSize];
+//			is.read(message);
+//			
+//			for (int i = 0; i < (messageSize-1)/4; i++) {
+//				int command = (int) message[0];
+//				switch (command) {
+//				case UPDATELEVEL:
+//					int x = convertToInt(message, 4*i +1);
+//					int y = convertToInt(message,4*++i +1);
+//					int imageIndex = convertToInt(message,4*++i +1);
+//					client.getLevel().update(x, y, imageIndex);
+//					break;
+//				case UPDATEDIRECTION:
+//					System.out.println("error, client doesnt get direction updates");
+//					break;
+//				case SERVERFULL:
+//					System.out.println("Could not connect, server is full");
+//					break;
+//				default:
+//					//System.out.println("error");
+//					break;
+//				}
+//			}
 			client.getLevel().repaint();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -89,11 +141,14 @@ public class ProtocolClient {
 	}
 
 	public void clientWrite(int direction) {
-		byte[] message = new byte[2];
-		message[0] = (byte) UPDATEDIRECTION;
-		message[1] = (byte) direction;
+		
+//		byte[] message = new byte[2];
+//		message[0] = (byte) UPDATEDIRECTION;
+//		message[1] = (byte) direction;
 		try {
-			os.write(message);
+			dos.writeInt(UPDATEDIRECTION);
+			dos.writeInt(direction);
+//			os.write(message);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

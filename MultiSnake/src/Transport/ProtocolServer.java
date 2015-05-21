@@ -1,5 +1,7 @@
 package Transport;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -17,6 +19,9 @@ public class ProtocolServer {
 	private InputStream is;
 	private OutputStream os;
 	private Snake snake;
+	
+	DataOutputStream dos;
+	DataInputStream dis;
 
 	public ProtocolServer(Socket socket, Snake snake){
 		this.socket = socket;
@@ -24,6 +29,10 @@ public class ProtocolServer {
 		try {
 			is = socket.getInputStream();
 			os = socket.getOutputStream();
+			
+			//TEST
+			dos = new DataOutputStream(os);
+			dis = new DataInputStream(is);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -48,23 +57,41 @@ public class ProtocolServer {
 
 	public void serverRead() {
 
+		
 		try {
-			byte[] message = new byte[2];
-			is.read(message);
-
-			int command = (int) message[0];
-			switch (command) {
-			case UPDATELEVEL:
-				System.out.println("error, server doesn't get update levels");
-				break;
-			case UPDATEDIRECTION:
-				int dir = (int)message[1];
-				snake.setDirection(dir);
-				break;
-			default:
-				System.out.println("error");
-				break;
-			}
+			int command = dis.readInt();
+			int direction = dis.readInt();
+			
+				switch (command) {
+				case UPDATELEVEL:
+					System.out.println("Error, cannot update level on server-side.");
+					break;
+				case UPDATEDIRECTION:
+					snake.setDirection(direction);
+					break;
+				default:
+					//System.out.println("error");
+					break;
+				}
+			
+			
+//		try {
+//			byte[] message = new byte[2];
+//			is.read(message);
+//
+//			int command = (int) message[0];
+//			switch (command) {
+//			case UPDATELEVEL:
+//				System.out.println("error, server doesn't get update levels");
+//				break;
+//			case UPDATEDIRECTION:
+//				int dir = (int)message[1];
+//				snake.setDirection(dir);
+//				break;
+//			default:
+//				System.out.println("error");
+//				break;
+//			}
 
 		} catch (IOException e) {
 			try {
@@ -77,16 +104,28 @@ public class ProtocolServer {
 	}
 
 	public void serverWrite(int[] positions) {
-		byte[] message = new byte[4*positions.length + 5];
-		convertToByteArray(4*positions.length + 1, message, 0);
-		message[4] = (byte) UPDATELEVEL;
-		for(int i = 0; i< positions.length; ++i){
-			convertToByteArray(positions[i], message, 4*i +5);
-		}
+		
 		try {
-			os.write(message);
-		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("Sending Size: "+positions.length);
+			dos.writeInt(positions.length);
+			for(int i = 0; i< positions.length; ++i){
+				dos.writeInt(positions[i]);
+			}
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
+		
+//		byte[] message = new byte[4*positions.length + 5];
+//		convertToByteArray(4*positions.length + 1, message, 0);
+//		message[4] = (byte) UPDATELEVEL;
+//		for(int i = 0; i< positions.length; ++i){
+//			convertToByteArray(positions[i], message, 4*i +5);
+//		}
+//		try {
+//			os.write(message);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	}
 }
