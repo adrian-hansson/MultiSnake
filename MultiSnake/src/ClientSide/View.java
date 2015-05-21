@@ -23,50 +23,41 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
 
 public class View implements KeyListener, ActionListener{
-
-	private JFrame frmMultisnake;
+	
+	private JFrame mainFrame;
 	JTextField textField;
 	Socket socket = null;
 	boolean connected = false;
 	Level level;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		try {
 			View window = new View();
-			window.frmMultisnake.setVisible(true);
+			window.mainFrame.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	/**
-	 * Create the application.
-	 */
 	public View() {
 		initialize();
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	private void initialize() {
 		connectToServer();
 		
-		frmMultisnake = new JFrame();
-		frmMultisnake.setResizable(false);
-		frmMultisnake.setTitle("MultiSnake");
-		frmMultisnake.setBounds(100, 100, 516, 539);
-		frmMultisnake.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frmMultisnake.getContentPane().setLayout(new BorderLayout(0, 0));
+		mainFrame = new JFrame();
+		mainFrame.setResizable(false);
+		mainFrame.setTitle("MultiSnake");
+		mainFrame.setBounds(100, 100, 516, 539);
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainFrame.getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		level = new Level(socket);
 		level.setToolTipText("");
 		level.setBackground(new Color(165, 98, 67));
-		frmMultisnake.getContentPane().add(level, BorderLayout.CENTER);
-		frmMultisnake.addKeyListener(this);
+		mainFrame.getContentPane().add(level, BorderLayout.CENTER);
+		mainFrame.addKeyListener(this);
 	}
 	
 	private void connectToServer() {

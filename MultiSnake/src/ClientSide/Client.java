@@ -13,14 +13,9 @@ import Transport.ProtocolClient;
 
 public class Client extends Thread{
 
-	//listens to input from the server.. and gives it to the Level.. which will repaint.
-	//also listens to the GUI and sends commands from that to the server
+	//listens to input from the server.. and gives it to the Level.. which will draw the graphics.
+	//also listens to the GUI and sends info about KeyPressed-events to the server
 	//holds Socket data, etc
-	
-	//----INFO PROTOCOL SUGGESTION----
-	//
-	//  Arrays are serializable. Send all positions[][] arrays in the right order. (same order as Player-list)
-	//
 	
 	Level level;
 	Snake snake;
@@ -49,7 +44,6 @@ public class Client extends Thread{
 		while(true){
 			protocol.clientRead();
 		}
-	
 	}
 	
 	public Level getLevel(){

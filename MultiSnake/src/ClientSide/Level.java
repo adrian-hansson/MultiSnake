@@ -38,10 +38,6 @@ public class Level extends JPanel{
 	
 	public void update(int x, int y, int index){
 		newGrid.add(new GridObject(x, y, index));
-//		this.x = x;
-//		this.y = y;
-//		this.index = index;
-//		this.repaint();
 	}
 	
 	public void paintComponent(Graphics g){

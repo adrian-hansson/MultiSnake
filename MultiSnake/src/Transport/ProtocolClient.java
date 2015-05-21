@@ -20,9 +20,8 @@ public class ProtocolClient {
 	private OutputStream os;
 	private Client client;
 	private Snake snake;
-	
-	DataOutputStream dos;
-	DataInputStream dis;
+	private DataOutputStream dos;
+	private DataInputStream dis;
 
 	public ProtocolClient(Socket socket, Client client){
 		this.socket = socket;
@@ -30,107 +29,30 @@ public class ProtocolClient {
 		try {
 			is = socket.getInputStream();
 			os = socket.getOutputStream();
-			
-			//TEST
 			dos = new DataOutputStream(os);
 			dis = new DataInputStream(is);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
 
-	private int convertToInt(byte[] b, int offset) {
-		int a = (b[0 + offset] << 24) & 0xFF000000;
-		int k = (b[1 + offset] << 16) & 0x00FF0000;
-		int c = (b[2 + offset] << 8) & 0x0000FF00;
-		int d = b[3 + offset] & 0x000000FF;
-		int res = a | k | c | d;
-		
-		return res;
-	}
-	
-	private void convertToByteArray(int b, byte[] res, int offset) {
-		res[0 + offset] = (byte)(b >> 24);
-		res[1 + offset] = (byte)(b >> 16);
-		res[2 + offset] = (byte)(b >> 8);
-		res[3 + offset] = (byte) b;
-		//System.out.println(res[0 + offset] + " " +  res[1 + offset]+ " " +  res[2 + offset]+ " " +  res[3 + offset] + " converted from " + b);
-	}
-
+	//Receives many ints from the server
+	//First int = messageSize (tells us how many ints to read before a new message starts), the rest of the ints are multiple iterations of posX, posY, graphicsIndex for ALL snake segments
+	//This is the data used by the clients to draw the graphics
 	public void clientRead() {
-
 		try {
 			int tempSize = dis.readInt();
 			int[] ints = new int[tempSize];
-			
-			//System.out.println("Received Size: "+tempSize);
 			for(int i = 0; i < tempSize; i++){
 				ints[i] = dis.readInt();
-			}
-			
+			}	
 			for (int i = 0; i < ints.length-2; i++) {
-				//int command = ints[i];
 				int x = ints[i];
 				int y = ints[i+1];
 				int imageIndex = ints[i+2];
 				client.getLevel().update(x,  y,  imageIndex);
 				i = i+2;
-				
-//				switch (command) {
-//				case UPDATELEVEL:
-//					int x = ints[i+1];
-//					int y = ints[i+2];
-//					int imageIndex = ints[i+3];
-//					client.getLevel().update(x,  y,  imageIndex);
-//					i = i+3;
-//					break;
-//				case UPDATEDIRECTION:
-//					System.out.println("error, client doesnt get direction updates");
-//					break;
-//				case SERVERFULL:
-//					System.out.println("Could not connect, server is full");
-//					break;
-//				default:
-//					System.out.println("error");
-//					break;
-//				}
 			}
-			
-			
-//			byte[] temp = new byte[4];
-//			is.read(temp);
-//
-//			
-//			
-//			
-//			
-//			
-//			int messageSize = convertToInt(temp, 0);
-//			System.out.println("MessageSize: "+messageSize); //temp edit
-//			byte[] message = new byte[messageSize];
-//			is.read(message);
-//			
-//			for (int i = 0; i < (messageSize-1)/4; i++) {
-//				int command = (int) message[0];
-//				switch (command) {
-//				case UPDATELEVEL:
-//					int x = convertToInt(message, 4*i +1);
-//					int y = convertToInt(message,4*++i +1);
-//					int imageIndex = convertToInt(message,4*++i +1);
-//					client.getLevel().update(x, y, imageIndex);
-//					break;
-//				case UPDATEDIRECTION:
-//					System.out.println("error, client doesnt get direction updates");
-//					break;
-//				case SERVERFULL:
-//					System.out.println("Could not connect, server is full");
-//					break;
-//				default:
-//					//System.out.println("error");
-//					break;
-//				}
-//			}
 			client.getLevel().repaint();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -140,19 +62,36 @@ public class ProtocolClient {
 
 	}
 
+	//Sends two ints to the server.
+	//First int = command type (only UPDATEDIRECTION used presently), Second int = direction (represented by ints 0 to 3)
 	public void clientWrite(int direction) {
-		
-//		byte[] message = new byte[2];
-//		message[0] = (byte) UPDATEDIRECTION;
-//		message[1] = (byte) direction;
 		try {
 			dos.writeInt(UPDATEDIRECTION);
 			dos.writeInt(direction);
-//			os.write(message);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
-
+	
+	//-------------------------------------------------------
+	//  DISCONTINUED METHODS BELOW. THEY ARE NO LONGER USED
+	//-------------------------------------------------------
+	
+	private int convertToInt(byte[] b, int offset) {
+		int a = (b[0 + offset] << 24) & 0xFF000000;
+		int k = (b[1 + offset] << 16) & 0x00FF0000;
+		int c = (b[2 + offset] << 8) & 0x0000FF00;
+		int d = b[3 + offset] & 0x000000FF;
+		int res = a | k | c | d;
+		return res;
+	}
+	
+	private void convertToByteArray(int b, byte[] res, int offset) {
+		res[0 + offset] = (byte)(b >> 24);
+		res[1 + offset] = (byte)(b >> 16);
+		res[2 + offset] = (byte)(b >> 8);
+		res[3 + offset] = (byte) b;
+	}
+	
 }
